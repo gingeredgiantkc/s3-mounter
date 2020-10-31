@@ -5,7 +5,8 @@ ENV MNT_POINT /var/s3fs
 ARG S3FS_VERSION=v1.87
 
 RUN apt-get update -qq
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -qq \
+ git \
  automake \
  curl \
  build-essential \
