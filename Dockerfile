@@ -4,7 +4,7 @@ ENV MNT_POINT /var/s3fs
 
 ARG S3FS_VERSION=v1.87
 
-RUN apk --update --no-cache add fuse alpine-sdk automake autoconf libxml2-dev fuse-dev curl-dev git bash; \
+RUN apk --update --no-cache add bash fuse libcurl libxml2 libstdc++ libgcc alpine-sdk automake autoconf libxml2-dev fuse-dev curl-dev git; \
     git clone https://github.com/s3fs-fuse/s3fs-fuse.git; \
     cd s3fs-fuse; \
     git checkout tags/${S3FS_VERSION}; \
@@ -14,7 +14,7 @@ RUN apk --update --no-cache add fuse alpine-sdk automake autoconf libxml2-dev fu
     make install; \
     make clean; \
     rm -rf /var/cache/apk/*; \
-    apk del git automake autoconf;
+    apk del alpine-sdk automake autoconf libxml2-dev fuse-dev curl-dev git;
 
 RUN mkdir -p "$MNT_POINT"
 
