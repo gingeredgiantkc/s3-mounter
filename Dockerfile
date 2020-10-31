@@ -26,7 +26,7 @@ RUN git clone https://github.com/s3fs-fuse/s3fs-fuse.git; \
   ./configure --prefix=/usr; \
   make; \
   make install; \
-  make clean; \ 
+  make clean \ 
 
 RUN mkdir -p "$MNT_POINT"
 
