@@ -1,20 +1,31 @@
-FROM alpine:3.12
+FROM ubuntu:18.04
 
 ENV MNT_POINT /var/s3fs
 
 ARG S3FS_VERSION=v1.87
 
-RUN apk --update --no-cache add bash fuse libcurl libxml2 libstdc++ libgcc alpine-sdk automake autoconf libxml2-dev fuse-dev curl-dev git; \
-    git clone https://github.com/s3fs-fuse/s3fs-fuse.git; \
-    cd s3fs-fuse; \
-    git checkout tags/${S3FS_VERSION}; \
-    ./autogen.sh; \
-    ./configure --prefix=/usr; \
-    make; \
-    make install; \
-    make clean; \
-    rm -rf /var/cache/apk/*; \
-    apk del alpine-sdk automake autoconf libxml2-dev fuse-dev curl-dev git;
+RUN apt-get update -qq
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+ automake \
+ curl \
+ build-essential \
+ libcurl4-openssl-dev \
+ libssl-dev \
+ libfuse-dev \
+ libtool \
+ libxml2-dev mime-support \
+ tar \
+ pkg-config \
+ && rm -rf /var/lib/apt/lists/*
+ 
+RUN git clone https://github.com/s3fs-fuse/s3fs-fuse.git; \
+  cd s3fs-fuse; \
+  git checkout tags/${S3FS_VERSION}; \
+  ./autogen.sh; \
+  ./configure --prefix=/usr; \
+  make; \
+  make install; \
+  make clean; \ 
 
 RUN mkdir -p "$MNT_POINT"
 
